@@ -3,7 +3,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* NAVBAR */
 nav {
   background-color: #333;
   padding: 10px;
@@ -66,8 +65,6 @@ nav ul li a:hover {
 }
 
 
-
-
 button {
   background-color: rgb(8, 136, 255);
   border-radius: 5px; 
@@ -95,14 +92,14 @@ button {
 
 .comentarios-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+  grid-template-columns: repeat(2, 1fr); 
   gap: 20px;
   justify-items: center; 
 }
 
 .comentario:nth-child(3) {
-  grid-column: span 2; /* Hace que el tercer comentario ocupe las dos columnas */
-  justify-self: center; /* Centra el comentario en la fila */
+  grid-column: span 2; 
+  justify-self: center; 
 }
 
 
