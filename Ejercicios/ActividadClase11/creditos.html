@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creditos</title>
+</head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+    }
+
+    header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+    #cursos-container {
+        margin: 20px auto;
+        padding: 10px;
+        max-width: 600px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .curso-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .curso-item label {
+        flex: 1;
+        font-weight: bold;
+    }
+
+    .curso-item input {
+        flex: 2;
+        padding: 5px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .curso-item button {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .curso-item button:hover {
+        background-color: #c82333;
+    }
+
+    #agregar-curso {
+        display: block;
+        width: 100%;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #agregar-curso:hover {
+        background-color: #0056b3;
+    }
+
+    #total-creditos-display {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    div {
+        margin: 10px auto;
+        max-width: 600px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+</style>
+
+<body>
+
+    <header>
+        <h2>Registro de cursos </h2>
+    </header>
+
+    <div id="cursos-container">
+        <!-- Aquí se agregarán los cursos -->
+    </div>
+    <div> <!--este boton agrega los cusros en el div de arriba-->
+        <button id="agregar-curso" class="btn btn-primary w-100 mt-3">Agregar Curso</button>
+    </div>
+    <div> <!--este div muestra el total de creditos-->
+        <label for="">Total de creditos: </label>
+        <span id="total-creditos-display">0</span>
+    </div>
+    <script> //este script agrega los cursos y los creditos 
+        let totalCreditos = 0; // se crea una variable para almacenar el total de creditos
+        const totalCreditosDisplay = document.getElementById('total-creditos-display'); //se crea una constante para mostrar el total de creditos en pantalla asignandolos a la clase total-creditos-display
+        const agregarCursoBtn = document.getElementById('agregar-curso'); //se crea una constante/btn para agregar los cursos
+        const cursosContainer = document.getElementById('cursos-container'); //se crea una constante para almacenar los cursos en el contenedor
+
+        function actualizarTotalCreditos() {//funcion para actualizar el total de creditos
+            totalCreditosDisplay.textContent = totalCreditos;//se asigna el total de creditos a la constante totalCreditosDisplay y  medinate el .textContent se indica que se mostrara en pantalla
+        }
+
+        agregarCursoBtn.addEventListener('click', () => { // se agrega un event listener click para que cunado se haga click al boton de agregar se llame el mismo y agregecontenido al div 
+            const nuevoCursoDiv = document.createElement('div'); // se crea un nuevo div para agregar los cursos
+            nuevoCursoDiv.classList.add('curso-item');  //se le asigna una clase al div
+            nuevoCursoDiv.innerHTML = `  <!--se le asigna un contenido al div-->
+                <label for="">Curso: </label>
+                <input type="text" name="curso" class="curso" required>
+                <label for="">Creditos</label>
+                <input type="number" name="creditos" class="creditos form-control" required>
+                <button class="eliminar-curso">Eliminar Curso</button>
+            `;
+            cursosContainer.appendChild(nuevoCursoDiv); //se agrega el div al contenedor de cursos comom un hijo
+
+            const eliminarCursoBtn = nuevoCursoDiv.querySelector('.eliminar-curso'); //se crea una constante para eliminar el curso mediante el boton de eliminar
+            eliminarCursoBtn.addEventListener('click', () => { // cuando se hace click en el boton 
+                const creditosInput = nuevoCursoDiv.querySelector('.creditos'); //se crea una constante para obtener los creditos del curso a eliminar 
+                const creditos = parseInt(creditosInput.value); // se parsean los datos a un entero
+                if (!isNaN(creditos) && creditos > 0) { // se verifica que los creditos sean un numero y mayor a 0
+                    totalCreditos -= creditos; //se realiza la   resta de los creditos
+                    actualizarTotalCreditos(); // se actualiza el total de creditos
+                }
+                cursosContainer.removeChild(nuevoCursoDiv); // se elimina el div en concreto del contener principal
+            });
+
+            const creditosInput = nuevoCursoDiv.querySelector('.creditos');//se crea una constante para obtener los creditos del curso
+            creditosInput.addEventListener('change', () => { //se agrega un event listener para que cuando se cambie el valor de los creditos se actualice el total de creditos
+                const creditos = parseInt(creditosInput.value);//se parsean los datos a un entero
+                if (!isNaN(creditos) && creditos > 0) {// se verifica que los creditos sean un numero y mayor a 0
+                    totalCreditos += creditos;//se suman los creditos
+                    actualizarTotalCreditos();
+                }
+            });
+        });
+
+        actualizarTotalCreditos();//se llama la funcion para actualizar el total de creditos
+    </script>
+
+</body>
+
+</html>

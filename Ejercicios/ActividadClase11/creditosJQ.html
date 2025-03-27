@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creditos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            margin: 0;
+        }
+
+        #cursos-container {
+            margin: 20px auto;
+            padding: 10px;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .curso-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .curso-item label {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .curso-item input {
+            flex: 2;
+            padding: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .curso-item button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .curso-item button:hover {
+            background-color: #c82333;
+        }
+
+        #agregar-curso {
+            display: block;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #agregar-curso:hover {
+            background-color: #0056b3;
+        }
+
+        #total-creditos-display {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        div {
+            margin: 10px auto;
+            max-width: 600px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>Registro de Cursos</h2>
+    </header>
+
+    <div id="cursos-container">
+        <!-- Aquí se agregarán los cursos -->
+    </div>
+    <div>
+        <button id="agregar-curso">Agregar Curso</button>
+    </div>
+    <div>
+        <label for="">Total de créditos: </label>
+        <span id="total-creditos-display">0</span>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let totalCreditos = 0;
+
+            // Función para actualizar el total de créditos en pantalla
+            function actualizarTotalCreditos() {
+                $('#total-creditos-display').text(totalCreditos);
+            }
+
+            // Evento para agregar un nuevo curso
+            $('#agregar-curso').on('click', function () {
+                const nuevoCursoDiv = $(`
+                    <div class="curso-item">
+                        <label for="">Curso: </label>
+                        <input type="text" name="curso" class="curso" required>
+                        <label for="">Créditos</label>
+                        <input type="number" name="creditos" class="creditos form-control" required>
+                        <button class="eliminar-curso">Eliminar Curso</button>
+                    </div>
+                `);
+
+                // Agregar el nuevo curso al contenedor
+                $('#cursos-container').append(nuevoCursoDiv);
+
+                // Manejar el evento de cambio en el campo de créditos
+                nuevoCursoDiv.find('.creditos').on('change', function () {
+                    const creditos = parseInt($(this).val());
+                    if (!isNaN(creditos) && creditos >= 0) {
+                        totalCreditos += creditos;
+                        actualizarTotalCreditos();
+                    }
+                });
+
+                // Manejar el evento de eliminar curso
+                nuevoCursoDiv.find('.eliminar-curso').on('click', function () {
+                    const creditos = parseInt(nuevoCursoDiv.find('.creditos').val());
+                    if (!isNaN(creditos) && creditos > 0) {
+                        totalCreditos -= creditos;
+                        if (totalCreditos < 0) totalCreditos = 0;
+                        actualizarTotalCreditos();
+                    }
+                    nuevoCursoDiv.remove();
+                });
+            });
+
+            // Inicializar el total de créditos
+            actualizarTotalCreditos();
+        });
+    </script>
+
+</body>
+
+</html>
