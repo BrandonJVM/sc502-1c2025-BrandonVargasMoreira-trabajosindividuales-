@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creditos</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- se importa jquery-->
+    <style> <!--se agregan estilos-->
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -101,35 +101,33 @@
 </head>
 
 <body>
-
     <header>
-        <h2>Registro de Cursos</h2>
+        <h2>Registro de cursos </h2>
     </header>
 
     <div id="cursos-container">
         <!-- Aquí se agregarán los cursos -->
     </div>
-    <div>
-        <button id="agregar-curso">Agregar Curso</button>
+    <div> <!--este boton agrega los cusros en el div de arriba-->
+        <button id="agregar-curso" class="btn btn-primary w-100 mt-3">Agregar Curso</button>
     </div>
-    <div>
-        <label for="">Total de créditos: </label>
+    <div> <!--este div muestra el total de creditos-->
+        <label for="">Total de creditos: </label>
         <span id="total-creditos-display">0</span>
     </div>
 
     <script>
-        $(document).ready(function () {
-            let totalCreditos = 0;
+        $(document).ready(function () { // se agrega el script para agregar los cursos y los creditos
+            let totalCreditos = 0; // se inicializa el valor de la variable para almacenar los creditos
+        
 
-            // Función para actualizar el total de créditos en pantalla
-            function actualizarTotalCreditos() {
-                $('#total-creditos-display').text(totalCreditos);
+            function actualizarTotalCreditos() {// se crea una funcino para actualizar el total de creditos
+                $('#total-creditos-display').text(totalCreditos);// se indica que el valor del name total-creditos-display es igual a la variable totalCreditos
             }
 
-            // Evento para agregar un nuevo curso
-            $('#agregar-curso').on('click', function () {
-                const nuevoCursoDiv = $(`
-                    <div class="curso-item">
+            $('#agregar-curso').on('click', function () { // cunado se hace click en el btn con el name agregar-curso se ejecuta la funcion
+                const nuevoCursoDiv = $(` <!--esto es ocmo una cadena de caracteres que se va a agregar al div de arriba-->co 
+                    <div class="curso-item"> 
                         <label for="">Curso: </label>
                         <input type="text" name="curso" class="curso" required>
                         <label for="">Créditos</label>
@@ -138,27 +136,25 @@
                     </div>
                 `);
 
-                // Agregar el nuevo curso al contenedor
-                $('#cursos-container').append(nuevoCursoDiv);
+                $('#cursos-container').append(nuevoCursoDiv); // se agrega  a el contenedor 
 
-                // Manejar el evento de cambio en el campo de créditos
-                nuevoCursoDiv.find('.creditos').on('change', function () {
-                    const creditos = parseInt($(this).val());
-                    if (!isNaN(creditos) && creditos >= 0) {
-                        totalCreditos += creditos;
-                        actualizarTotalCreditos();
+                nuevoCursoDiv.find('.creditos').on('change', function () { // se agrega un evento para actualizar al cantidad de creditos 
+                    // esto cuando cambia le valor que se encuentra en el input de creditos
+                    const creditos = parseInt($(this).val());// se parsea el valor de los creditos
+                    if (!isNaN(creditos) && creditos >= 0) { // se verifica que el valor sea un numero y que sea mayor o igual a 0
+                        totalCreditos += creditos; // se suman los creditos
+                        actualizarTotalCreditos(); // se llama a la funcion para actualizar los creditos
                     }
                 });
 
-                // Manejar el evento de eliminar curso
-                nuevoCursoDiv.find('.eliminar-curso').on('click', function () {
-                    const creditos = parseInt(nuevoCursoDiv.find('.creditos').val());
-                    if (!isNaN(creditos) && creditos > 0) {
-                        totalCreditos -= creditos;
+                nuevoCursoDiv.find('.eliminar-curso').on('click', function () { // se agrega un evento para eliminar el curso cunado se preciona el btn con el name eliminar-curso
+                    const creditos = parseInt(nuevoCursoDiv.find('.creditos').val()); // se toman los creditos de ese cirso que se va a eliminar
+                    if (!isNaN(creditos) && creditos > 0) {// se verifica que los creditos sean un numero y mayor a 0
+                        totalCreditos -= creditos;// se restan los creditos
                         if (totalCreditos < 0) totalCreditos = 0;
-                        actualizarTotalCreditos();
+                        actualizarTotalCreditos();      // se actualiza el total de creditos
                     }
-                    nuevoCursoDiv.remove();
+                    nuevoCursoDiv.remove();// se elimina el curso del contenedor principal
                 });
             });
 
