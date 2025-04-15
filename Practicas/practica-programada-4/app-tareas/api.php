@@ -1,12 +1,12 @@
 <?php
 header('Content-Type: application/json');
 
-$host = '127.0.0.1';
+$host = '127.0.0.1';// info de la db 
 $dbname = 'tareas';
 $user = 'root';
 $pass = '';
 
-try {
+try {// se realiza la conexion 
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -16,17 +16,16 @@ try {
     exit;
 }
 
-// Obtener datos
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {// para cunado la accion es de tipo get o de obtener 
     $action = $_GET['action'] ?? '';
 
-    if ($action === 'tareas') {
+    if ($action === 'tareas') {// si la acion es tareas se hace la consulta y se envian la tareas 
         $stmt = $pdo->query("SELECT * FROM tareas");
         $tareas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($tareas);
         exit;
     }
-    if ($action === 'comentarios' && isset($_GET['tarea_id'])) {
+    if ($action === 'comentarios' && isset($_GET['tarea_id'])) {// si es ocmenarios y hay un id se obtienen los comentarios
         $tarea_id = (int) $_GET['tarea_id'];
         $stmt = $pdo->prepare("SELECT * FROM comentarios WHERE tarea_id = ?");
         $stmt->execute([$tarea_id]);
@@ -42,11 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {// si es de tipo post 
     $action = $_GET['action'] ?? '';
 
-    if ($action === 'crear_tarea') {
+    if ($action === 'crear_tarea') {// se crea una tarea y se envia 
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
         $dueDate = $_POST['dueDate'] ?? '';
@@ -62,14 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         exit;
-    }
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_GET['action'] ?? '';
-
-    if ($action === 'eliminar_comentario') {
+    }elseif ($action === 'eliminar_comentario') {// si hay que qliminar un comentario se optiene el id y se elimina 
         $comentario_id = (int) $_POST['comentario_id'];
         $stmt = $pdo->prepare("DELETE FROM comentarios WHERE comentario_id = ?");
         $exito = $stmt->execute([$comentario_id]);
@@ -77,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => $exito]);
         exit;
     }
-    elseif($action === 'agregar_comentario') {
+    elseif($action === 'agregar_comentario') {// si hay que agreagar un coenatio se optiene el id de la tarea y se agrega
         $comentario = $_POST['comentario'] ?? '';
         $tarea_id = (int) ($_POST['tarea_id'] ?? 0);
     
@@ -90,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['success' => false, 'error' => 'Faltan datos']);
         }
         exit;
-    }elseif ($action === 'eliminar_tarea') {
+    }elseif ($action === 'eliminar_tarea') {// si hay que elimianr una tarea se optiene el id de la tarea y se elimian 
         header('Content-Type: application/json');
     
         $tareaId = $_POST['tarea_id'] ?? null;
