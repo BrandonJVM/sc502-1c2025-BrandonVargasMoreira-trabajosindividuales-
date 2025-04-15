@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const taskList = document.getElementById('task-list');
+console.log(taskList);  
 
-    // Obtener tareas y mostrarlas
-    fetch('api.php?action=tareas')
-        .then(res => res.json())
-        .then(tareas => {
-            taskList.innerHTML = ''; // Limpiar
+    fetch('api.php?action=tareas').then(res => res.json()).then(tareas => {
+            taskList.innerHTML = ''; 
             tareas.forEach(tarea => {
                 const taskCard = document.createElement('div');
                 taskCard.className = 'card mb-3';
@@ -19,10 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
                 taskList.appendChild(taskCard);
 
-                // Obtener comentarios
-                fetch(`api.php?action=comentarios&tarea_id=${tarea.id}`)
-                    .then(res => res.json())
-                    .then(comentarios => {
+                fetch(`api.php?action=comentarios&tarea_id=${tarea.id}`).then(res => res.json()).then(comentarios => {
                         const comentariosDiv = document.getElementById(`comentarios-tarea-${tarea.id}`);
                         comentarios.forEach((comentario, i) => {
                             const comentarioHTML = `<p>${i + 1}. ${comentario.comentario}</p>`;
@@ -32,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-    // Agregar tarea
     document.getElementById('task-form').addEventListener('submit', function (e) {
         e.preventDefault();
 

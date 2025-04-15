@@ -16,7 +16,6 @@ try {
     exit;
 }
 
-// Obtener datos
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $action = $_GET['action'] ?? '';
 
@@ -24,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $stmt = $pdo->query("SELECT * FROM tareas");
         $tareas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($tareas);
+        print_r($tareas);
         exit;
     }
 
@@ -41,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// Crear tarea
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_GET['action'] ?? '';
 
