@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const modalElement = document.getElementById('taskModal');
                     const modalInstance = bootstrap.Modal.getInstance(modalElement);
                     modalInstance.hide();
+                    location.reload();
 
                 } else {
                     alert(data.error || 'Ocurrió un error');
