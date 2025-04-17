@@ -73,6 +73,10 @@ if (!isset($_SESSION['user_id'])) {
         </div>
 
     </div>
+
+    <footer>
+        Mala mia profe no me dio la cabeza para lograr pasar el is a el cooments.php
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/dashboard.js"></script>
 
