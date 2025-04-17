@@ -19,7 +19,6 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 switch ($method) {
     case 'GET':
-        // Requiere que se pase el ID de la tarea por parámetro en la URL
         if (isset($_GET['task_id'])) {// si se optiene un taskid
             $taskId = $_GET['task_id'];// se almacena el task id en una variable 
             $stmt = $conn->prepare("SELECT id, content, created_at FROM comments WHERE task_id = ?");// se envia el query 

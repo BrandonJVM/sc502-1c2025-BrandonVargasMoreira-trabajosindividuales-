@@ -14,11 +14,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $userId = $_SESSION['user_id'];
-
-// Obtener el método de la solicitud
 $method = $_SERVER['REQUEST_METHOD'];
-
-// Lee el cuerpo de la solicitud 
 $data = json_decode(file_get_contents("php://input"), true);
 
 switch ($method) {
@@ -67,7 +63,6 @@ switch ($method) {
 
     case 'DELETE':
         $id = $data['id'] ?? null;
-
         if ($id) {
             $stmt = $conn->prepare("DELETE FROM tasks WHERE id = ? AND userId = ?");
             $stmt->bind_param("ii", $id, $userId);
