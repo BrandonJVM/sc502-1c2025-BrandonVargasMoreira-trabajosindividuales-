@@ -1,28 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
     let tasks = [];
-    let comentarios = [];
 
     async function fetchTasks() {
         const res = await fetch('api/tasks.php');
         tasks = await res.json();
+
+        // Inicializa un arreglo de comentarios en memoria por tarea
         tasks.forEach(task => {
             if (!task.comments) {
                 task.comments = [];
             }
         });
+
         loadTasks();
     }
-    async function fetchComments() {
-        const res = await fetch('api/comments.php');
-        tasks = await res.json();
-        tasks.forEach(task => {
-            if (!task.comments) {
-                task.comments = [];
-            }
-        });
-        loadTasks();
-    }
-    
+
 
     function loadTasks() {
         const taskList = document.getElementById('task-list');
@@ -82,36 +74,54 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function handleAddComment(e) {
-        const taskId = parseInt(e.target.dataset.id);// este es el id de la tarea ya 
-        const input = document.getElementById(`comment-input-${taskId}`);// este es el contenido que se saca del fornt 
-        const value = input.value.trim();// se hace nu trin de la cadena de texto 
-
-        await fetch('api/comments.php', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ taskId: taskId })
-        });
-        if (value) {// si hay un value 
-            const task = tasks.find(t => t.id === taskId);
-            if (task) {
-                task.comments.push(value);
-                input.value = '';
-                loadTasks();
-            }
-        }
-        await fetchTasks();
-
-    }
-
-    function handleDeleteComment(e) {
         const taskId = parseInt(e.target.dataset.task);
         const index = parseInt(e.target.dataset.index);
         const task = tasks.find(t => t.id === taskId);
-        if (task && task.comments[index] !== undefined) {
-            task.comments.splice(index, 1);
+    
+        const data = {
+            taskId: taskId,
+            description: '' // Aquí probablemente va el contenido del comentario
+        };
+    
+        const url = 'api/comments.php';
+    
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+    
+        if (response.ok) {
             loadTasks();
+        } else {
+            console.error('Hubo un error al procesar la tarea');
         }
     }
+    
+
+    async function handleDeleteComment(e) {
+        const taskId = parseInt(e.target.dataset.task);
+        const index = parseInt(e.target.dataset.index);
+        const task = tasks.find(t => t.id === taskId);
+    
+        const data = {
+        };
+    
+        const url = 'api/comments.php';
+    
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+    
+        if (response.ok) {
+            loadTasks();
+        } else {
+            console.error('Hubo un error al procesar la tarea');
+        }
+    }
+    
 
     function handleEditTask(e) {
         const taskId = parseInt(e.target.dataset.id);

@@ -13,48 +13,48 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$userId = $_SESSION['user_id'];
+$taskID = $_SESSION['user_id'];
 $method = $_SERVER['REQUEST_METHOD'];
 $data = json_decode(file_get_contents("php://input"), true);
 
 switch ($method) {
     case 'GET':
-        if (isset($_GET['taskId'])) {// si se optiene un taskid
-            $taskId = $_GET['taskId'];// se almacena el task id en una variable 
-            $stmt = $conn->prepare("SELECT id, content, created_at FROM comments WHERE taskId = ?");// se envia el query 
-            $stmt->bind_param("i", $taskId);// se sustituyen los parametros
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $comments = $result->fetch_all(MYSQLI_ASSOC);
-            echo json_encode($comments);
-        } 
+        // Obtener todas las tareas del usuario
+        $stmt = $conn->prepare("SELECT description, due_date FROM tasks WHERE userId = ?");
+        $stmt->bind_param("i", $taskID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $tasks = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode($tasks);
         break;
 
-    case 'POST':// metodo para enviar los comentario 
-        $taskId = $data['taskId'] ?? null; // se optiene el task id del body
-        $description = $data['description'] ?? '';// se optiene el contenido del body
+    case 'POST':
+        $description = $data['description'] ?? '';
+        $dueDate = $data['due_date'] ?? '';
 
-        if ($taskId && $condescriptiontent) {// si hay info 
-            $stmt = $conn->prepare("INSERT INTO comments (taskId, description, create_at) VALUES (?, ?, NOW())");// se hace el insert y aparte se agrega la fecha de hoy
-            $stmt->bind_param("iis", $taskId,$description);
+        if ($description && $create_at) {
+            $stmt = $conn->prepare("INSERT INTO tasks (description, create_at) VALUES (?, NOW())");
+            $stmt->bind_param("isss", $taskID, $title, $description, $dueDate);
             $stmt->execute();
-            echo json_encode(['success' => true, 'id' => $stmt->insert_id]);
+            echo json_encode(['success' => true, 'task_id' => $stmt->insert_id]);
         } else {
             http_response_code(400);
             echo json_encode(['error' => 'Campos incompletos']);
         }
         break;
 
+    
+
     case 'DELETE':
-        $commentId = $data['id'] ?? null;
-        if ($commentId) {
-            $stmt = $conn->prepare("DELETE FROM comments WHERE id = ? ");// se crea el query del delete con el parametro necesaro 
-            $stmt->bind_param("i", $commentId);// se sustituyen los parametros
+        $id = $data['id'] ?? null;
+        if ($id) {
+            $stmt = $conn->prepare("DELETE FROM commnets WHERE id = ?");
+            $stmt->bind_param("i", $id);
             $stmt->execute();
             echo json_encode(['success' => true]);
         } else {
             http_response_code(400);
-            echo json_encode(['error' => 'ID de comentario no proporcionado']);
+            echo json_encode(['error' => 'ID no proporcionado']);
         }
         break;
 
