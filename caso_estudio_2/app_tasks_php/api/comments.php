@@ -48,8 +48,8 @@ switch ($method) {
     case 'DELETE':
         $commentId = $data['id'] ?? null;
         if ($commentId) {
-            $stmt = $conn->prepare("DELETE FROM comments WHERE id = ? ");
-            $stmt->bind_param("i", $commentId);
+            $stmt = $conn->prepare("DELETE FROM comments WHERE id = ? ");// se crea el query del delete con el parametro necesaro 
+            $stmt->bind_param("i", $commentId);// se sustituyen los parametros
             $stmt->execute();
             echo json_encode(['success' => true]);
         } else {
